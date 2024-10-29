@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DesignQ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="background-overlay blurred"></div> <!-- Start with blurred background -->
+    <div class="quiz-section" id="quiz">
+        <h2 class="question" id="question">What aspect do you value most in a product?</h2>
+        <div class="options">
+            <button class="option" id="a">Quality and Durability</button>
+            <button class="option" id="b">Heritage and Story</button>
+        </div>
+    </div>
+
+    <!-- JavaScript for the quiz logic -->
+    <script>
+        // Quiz Data
+        const quizData = [
+            { question: "What aspect do you value most in a product?", a: "Quality and Durability", b: "Heritage and Story" },
+            { question: "How often do you consider sustainability in purchases?", a: "Sometimes", b: "Always" },
+            { question: "Do you prefer handcrafted products over mass-produced ones?", a: "Yes", b: "No" },
+            { question: "How important is product quality and impact to you?", a: "Very important", b: "Somewhat important" },
+            { question: "How much do you value the cultural heritage behind a product?", a: "I appreciate it", b: "It’s very important to me" },
+            { question: "Are you curious about the artisan's story?", a: "Somewhat", b: "Very much" },
+            { question: "Do you prioritize quality assurance in purchases?", a: "Yes", b: "Not as much" },
+            { question: "How much do you value traditional techniques?", a: "I appreciate them", b: "Very much" },
+            { question: "Do you prefer limited-edition or unique products?", a: "Yes", b: "Not necessarily" },
+            { question: "Is environmental impact important to you?", a: "Somewhat", b: "Very much" },
+        ];
+
+        let currentQuestion = 0;
+        let scoreA = 0;
+        let scoreB = 0;
+        let heritageFocusB = 0;
+        let qualityFocusA = 0;
+        let sustainabilityFocusA = 0;
+
+        const questionEl = document.getElementById("question");
+        const optionA = document.getElementById("a");
+        const optionB = document.getElementById("b");
+        const backgroundOverlay = document.querySelector('.background-overlay'); // Select background overlay element
+        const quizSection = document.getElementById("quiz");
+
+        // Function to toggle blur effect
+        function toggleBlur(isBlurred) {
+            if (isBlurred) {
+                backgroundOverlay.classList.add('blurred');
+                backgroundOverlay.classList.remove('unblurred');
+            } else {
+                backgroundOverlay.classList.add('unblurred');
+                backgroundOverlay.classList.remove('blurred');
+            }
+        }
+
+        // Load the initial question
+        function loadQuestion() {
+            const currentQuizData = quizData[currentQuestion];
+            questionEl.innerText = currentQuizData.question;
+            optionA.innerText = currentQuizData.a;
+            optionB.innerText = currentQuizData.b;
+
+            // Reapply the blur when a new question loads
+            toggleBlur(true);
+            quizSection.classList.add("fade-in"); // Apply fade-in effect
+            quizSection.classList.remove("fade-out");
+        }
+
+        loadQuestion();
+
+        // Event listeners for option buttons
+        document.querySelectorAll(".option").forEach(option => {
+            option.addEventListener("click", (e) => {
+                const answer = e.target.id;
+                if (answer === "a") scoreA++;
+                else if (answer === "b") scoreB++;
+
+                // Remove blur when an option is clicked
+                toggleBlur(false);
+                quizSection.classList.add("fade-out"); // Apply fade-out effect
+                quizSection.classList.remove("fade-in");
+
+                // Specific counters for custom results
+                if (currentQuestion === 4 || currentQuestion === 7) {
+                    if (answer === "b") heritageFocusB++;
+                }
+                if (currentQuestion === 2 || currentQuestion === 9) {
+                    if (answer === "a") sustainabilityFocusA++;
+                }
+                if (currentQuestion === 3 || currentQuestion === 6) {
+                    if (answer === "a") qualityFocusA++;
+                }
+
+                // Load next question or show result after a delay for fade-out effect
+                currentQuestion++;
+                if (currentQuestion < quizData.length) {
+                    setTimeout(loadQuestion, 1500); // 1.5s delay for transition
+                } else {
+                    setTimeout(() => {
+                        toggleBlur(true); // Reapply blur for the result screen
+                        quizSection.classList.remove("fade-out");
+                        quizSection.classList.add("fade-in");
+                        showResult();
+                    }, 1500);
+                }
+            });
+        });
+
+        // Display result
+        function showResult() {
+            let category, description, supplementaryTools;
+            if (scoreA > scoreB) {
+                if (heritageFocusB > 0) {
+                    category = "The Tradition Keeper";
+                    description = "Appreciates the heritage of handloom...";
+                    supplementaryTools = "Heritage guides, technique videos...";
+                } else {
+                    category = "The Artisan Ally";
+                    description = "Engaged with artisans’ stories...";
+                    supplementaryTools = "Story collections, virtual tours...";
+                }
+            } else {
+                if (qualityFocusA > 0) {
+                    category = "The Quality Seeker";
+                    description = "Focuses on quality, durability...";
+                    supplementaryTools = "Quality assurance, limited editions...";
+                } else if (sustainabilityFocusA > 0) {
+                    category = "The Conscious Explorer";
+                    description = "Interested in sustainable options...";
+                    supplementaryTools = "Beginner's guide, environmental info...";
+                } else {
+                    category = "The Artisan Ally";
+                    description = "Engaged with artisans’ stories...";
+                    supplementaryTools = "Story collections, virtual tours...";
+                }
+            }
+
+            document.getElementById("quiz").innerHTML = `
+                <h2>You are: ${category}</h2>
+                <p><strong>Description:</strong> ${description}</p>
+                <p><strong>Supplementary Tools:</strong> ${supplementaryTools}</p>
+                <button onclick="location.reload()">Restart Quiz</button>
+            `;
+        }
+    </script>
+</body>
+</html>

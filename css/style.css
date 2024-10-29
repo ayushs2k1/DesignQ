@@ -1,0 +1,109 @@
+/* Reset and basic styling */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body, html {
+    height: 100%;
+    overflow: hidden;
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Background overlay with blur */
+.background-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('backgd.jpeg'); /* Path to your background image */
+    background-size: cover;
+    background-position: center;
+    z-index: -1;
+    transition: filter 1.5s ease; /* Smooth transition for blur effect */
+}
+
+.background-overlay.blurred {
+    filter: blur(15px);
+}
+
+.background-overlay.unblurred {
+    filter: blur(0px);
+}
+
+/* Quiz section styling */
+.quiz-section {
+    text-align: center;
+    max-width: 700px;
+    width: 80%;
+    padding: 40px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 15px; /* Rounded corners */
+    backdrop-filter: blur(10px);
+    color: white;
+    transition: opacity 1s ease; /* Smooth opacity transition */
+}
+
+.quiz-section.fade-in {
+    opacity: 1;
+}
+
+.quiz-section.fade-out {
+    opacity: 0;
+}
+
+/* Question styling with Playfair Display font */
+.question {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-bottom: 30px;
+}
+
+/* Options as buttons with Montserrat font */
+.options {
+    display: flex;
+    flex-direction: row; /* Horizontal layout */
+    gap: 10px; /* Adjust spacing */
+    justify-content: center;
+}
+
+.option {
+    font-family: 'Montserrat', sans-serif;
+    padding: 20px 50px; /* Increased padding for wider buttons */
+    border: 2px solid white;
+    border-radius: 12px; /* Rounded corners */
+    font-size: 1.2em;
+    cursor: pointer;
+    color: white;
+    background-color: transparent;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.option:hover {
+    background-color: white;
+    color: #333;
+}
+
+/* Result button */
+button {
+    background-color: #FFD200;
+    color: #333;
+    padding: 10px 20px;
+    font-size: 1em;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+    font-family: 'Montserrat', sans-serif;
+}
+
+button:hover {
+    background-color: #FF6600;
+    color: white;
+}
